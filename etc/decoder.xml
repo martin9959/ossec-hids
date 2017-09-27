@@ -3090,7 +3090,9 @@ s=2 SFwdQ=0 SDupQ=0 SErr=0 RQ=2 RIQ=0 RFwdQ=0 RDupQ=0 RTCP=0 SFwdR=0 SFail=0 SFE
   - Sep  4 11:33:23 sni psad: src: 46.17.46.8 signature match: "DOS iParty DOS attempt" (sid: 1605) tcp port: 6004
   - Sep  4 11:33:23 sni psad: src: 46.17.46.8 signature match: "DOS Real Audio Server communication attempt" (sid: 100112) tcp port: 7070
   - Sep  4 11:33:23 sni psad: src: 46.17.46.8 signature match: "BACKDOOR DoomJuice file upload attempt" (sid: 2375) tcp port: 3129
-  - Aug  9 16:46:32 dsc psad: message repeated 2 times: [ scan detected (Nmap -sT or -sS scan): 10.1.0.15 -> 192.168.1.18 tcp: [80] flags: SYN tcp pkts: 3 DL: 3]example logs: 
+  - Aug  9 16:46:32 dsc psad: message repeated 2 times: [ scan detected (Nmap -sT or -sS scan): 10.1.0.15 -> 192.168.1.18 tcp: [80] flags: SYN tcp pkts: 3 DL: 3]
+  - Sep 24 22:29:54 sni psad: src: 163.172.142.215 signature match: "ICMP Destination Unreachable Port Unreachable" (sid: 402) icmp
+  - Sep 24 21:55:27 sni psad: scan detected 163.172.142.215 -> 78.29.228.78 icmp pkts: 4 DL: 4
 -->
 
 <decoder name="psad">
@@ -3100,7 +3102,7 @@ s=2 SFwdQ=0 SDupQ=0 SErr=0 RQ=2 RIQ=0 RFwdQ=0 RDupQ=0 RTCP=0 SFwdR=0 SFail=0 SFE
 <decoder name="psad-scan">
   <parent>psad</parent>
   <prematch>^scan detected </prematch>
-  <regex offset="after_prematch"> (\S+) -> (\S+) \.+ DL: (\d)</regex>
+  <regex offset="after_prematch">(\S+) -> (\S+) \.+ DL: (\d)</regex>
   <order>srcip,dstip,status</order>
 </decoder>
 
@@ -3114,7 +3116,7 @@ s=2 SFwdQ=0 SDupQ=0 SErr=0 RQ=2 RIQ=0 RFwdQ=0 RDupQ=0 RTCP=0 SFwdR=0 SFail=0 SFE
 <decoder name="psad-signature">
   <parent>psad</parent>
   <prematch>signature match: </prematch>
-  <regex offset="after_parent">src: (\S+) signature match: \.+ port: (\d+)</regex>
+  <regex offset="after_parent">src: (\S+) signature match: \.+ port: (\d+)|src: (\S+) signature match:</regex>
   <order>srcip,dstport</order>
 </decoder>
 
